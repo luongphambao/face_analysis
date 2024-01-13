@@ -1,0 +1,38 @@
+{
+    "age": {
+        "20-30s": 0,
+        "40-50s": 1,
+        "Kid": 2,
+        "Senior": 3,
+        "Baby": 4,
+        "Teenager": 5
+    },
+    "race": {
+        "Caucasian": 0,
+        "Mongoloid": 1,
+        "Negroid": 2
+    },
+    "masked": {
+        "unmasked": 0,
+        "masked": 1
+    },
+    "skintone": {
+        "mid-light": 0,
+        "light": 1,
+        "mid-dark": 2,
+        "dark": 3
+    },
+    "emotion": {
+        "Neutral": 0,
+        "Happiness": 1,
+        "Anger": 2,
+        "Surprise": 3,
+        "Fear": 4,
+        "Sadness": 5,
+        "Disgust": 6
+    },
+    "gender": {
+        "Male": 0,
+        "Female": 1
+    }
+}
