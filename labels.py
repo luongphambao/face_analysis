@@ -50,5 +50,6 @@ df["masked"]=df["masked"].map(masked_dict)
 df["skintone"]=df["skintone"].map(skintone_dict)
 df["emotion"]=df["emotion"].map(emotion_dict)
 df["gender"]=df["gender"].map(gender_dict)
+df["crop_name"]=[str(i)+".jpg" for i in range(len(df))]
 df.to_csv("labels1.csv",index=False)
 #list_race_label
