@@ -3,7 +3,7 @@ import torchvision
 from torchvision import transforms
 import json 
 from torchvision.models import resnet18, resnet34, resnet50, resnet101,efficientnet_b0,efficientnet_b1
-from models import HydraNetModified
+from model import HydraNetModified
 def convert(x1,y1,x2,y2):
     "return x,y,w,h"
     x=x1
@@ -40,7 +40,8 @@ def get_model_analysis(name="efficientnet",weight_path="weights_2/model_15.pth")
     elif name=="resnet":
         net = resnet34(pretrained=True)
         model = HydraNetModified(net,backbone="resnet")
-    model.load_state_dict(torch.load(weight_path))
+    if weight_path is not None:
+        model.load_state_dict(torch.load(weight_path))
     model.to(device=device)
     model.eval()
     return model
