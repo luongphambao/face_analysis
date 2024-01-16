@@ -10,8 +10,13 @@ import torch.nn.functional as F
 import argparse 
 import os 
 from yolov5_face.detector import Yolov5Face
-from models import HydraNetModified
-from utils import convert,mapping,get_model_analysis,transform
+print("hello")
+import sys
+sys.path.insert(0,"/")
+from model import HydraNetModified
+from util import convert,mapping,get_model_analysis,transform
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -23,7 +28,7 @@ def parse_args():
     parser.add_argument('--save_path', type=str, default='answer.csv')
     parser.add_argument('--model_name', type=str, default='efficientnet')
     parser.add_argument('--img_size', type=int, default=224)
-    parser.add_argument('--weights_path', type=str, default='weights_2/model_15.pth')
+    parser.add_argument('--weights_path', type=str, default='weights/model.pth')
     args = parser.parse_args()
     return args
 def main():
@@ -37,9 +42,11 @@ def main():
     weights_path=args.weights_path
     data_img2id_path=args.data_img2id_path
     csv_path=args.csv_path
+    #print("hello")
     detector = Yolov5Face(model_file=weights_detect_path)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model=get_model_analysis(name=model_name,weight_path=weights_path)
+    model.to(device=device)
     age_mapping,gender_mapping,race_mapping,emotion_mapping,skintone_mapping,masked_mapping=mapping(json_path=json_path)
     df_answer=pd.read_csv(csv_path)
     mapping_id=json.load(open(data_img2id_path))
@@ -75,6 +82,7 @@ def main():
             bbox_str=str([x,y,w,h])
             image_id=mapping_id[img_name]
             row=[img_name,bbox_str,image_id,race,age,emotion,gender,skintone,masked]
+            print(i)
             list_submit.append(row)
     df_submit=pd.DataFrame()
     df_submit["file_name"]=[row[0] for row in list_submit]
@@ -87,3 +95,5 @@ def main():
     df_submit["skintone"]=[row[7] for row in list_submit]
     df_submit["masked"]=[row[8] for row in list_submit]
     df_submit.to_csv(save_path,index=False)
+if __name__ == "__main__":
+    main()
