@@ -22,9 +22,9 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights_detect_path', type=str, default='weights/yolov5s-face.pt')
     parser.add_argument('--json_path', type=str, default='labels.json')
-    parser.add_argument('--data_folder_path', type=str, default='public_test')
-    parser.add_argument('--data_img2id_path', type=str, default='public_test_and_submission_guidelines/file_name_to_image_id.json')
-    parser.add_argument('--csv_path', type=str, default='public_test_and_submission_guidelines/answer.csv')
+    parser.add_argument('--data_folder_path', type=str, default='private_test_data')
+    parser.add_argument('--data_img2id_path', type=str, default='private_test/file_name_to_image_id.json')
+    parser.add_argument('--csv_path', type=str, default='private_test/answer.csv')
     parser.add_argument('--save_path', type=str, default='answer.csv')
     parser.add_argument('--model_name', type=str, default='efficientnet')
     parser.add_argument('--img_size', type=int, default=224)
@@ -46,16 +46,19 @@ def main():
     detector = Yolov5Face(model_file=weights_detect_path)
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model=get_model_analysis(name=model_name,weight_path=weights_path)
-    model.to(device=device)
+    #model.to(device=device)
     age_mapping,gender_mapping,race_mapping,emotion_mapping,skintone_mapping,masked_mapping=mapping(json_path=json_path)
     df_answer=pd.read_csv(csv_path)
     mapping_id=json.load(open(data_img2id_path))
     list_submit=[]
-    for i in range(len(df_answer)):
+    for i in range(len(df_answer))[:]:
         dict_answer=df_answer.iloc[i].to_dict()
         img_name=dict_answer["file_name"]
         img_path=os.path.join(data_folder_path,img_name)
         img=cv2.imread(img_path)
+        height=dict_answer["height"]
+        width=dict_answer["width"]
+        file_name=dict_answer["file_name"]
         bboxes, landmarks=detector.detect(image=img)
         for bbox in bboxes[:]:
             x1,y1,x2,y2,conf=bbox
@@ -81,19 +84,21 @@ def main():
             masked=masked_mapping[masked]
             bbox_str=str([x,y,w,h])
             image_id=mapping_id[img_name]
-            row=[img_name,bbox_str,image_id,race,age,emotion,gender,skintone,masked]
+            row=[file_name,height,width,image_id,str([x,y,w,h]),skintone,age,race,emotion,gender,masked]
             print(i)
             list_submit.append(row)
     df_submit=pd.DataFrame()
     df_submit["file_name"]=[row[0] for row in list_submit]
-    df_submit["bbox"]=[row[1] for row in list_submit]
-    df_submit["image_id"]=[row[2] for row in list_submit]
-    df_submit["race"]=[row[3] for row in list_submit]
-    df_submit["age"]=[row[4] for row in list_submit]
-    df_submit["emotion"]=[row[5] for row in list_submit]
-    df_submit["gender"]=[row[6] for row in list_submit]
-    df_submit["skintone"]=[row[7] for row in list_submit]
-    df_submit["masked"]=[row[8] for row in list_submit]
+    df_submit["height"]=[row[1] for row in list_submit]
+    df_submit["width"]=[row[2] for row in list_submit]
+    df_submit["image_id"]=[row[3] for row in list_submit]
+    df_submit["bbox"]=[row[4] for row in list_submit]
+    df_submit["race"]=[row[7] for row in list_submit]
+    df_submit["age"]=[row[6] for row in list_submit]
+    df_submit["emotion"]=[row[8] for row in list_submit]
+    df_submit["gender"]=[row[9] for row in list_submit]
+    df_submit["skintone"]=[row[5] for row in list_submit]
+    df_submit["masked"]=[row[10] for row in list_submit]
     df_submit.to_csv(save_path,index=False)
 if __name__ == "__main__":
     main()
