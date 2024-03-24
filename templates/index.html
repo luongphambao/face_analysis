@@ -1,0 +1,87 @@
+{% extends 'layout.html' %} {% block body %}
+
+<div class="container">
+  <br />
+  <br />
+
+  <div class="alert alert-warning">
+    <h4 class="alert-heading">
+      <i class="bi bi-exclamation-triangle-fill"></i> Note:
+    </h4>
+    <p>
+      To get the best result, please upload a vertical photo, without tilt or
+      angle, and with good lighting conditions
+    </p>
+  </div>
+  <br /><br />
+
+  <form action="#" method="POST" enctype="multipart/form-data">
+    <div class="input-group">
+      <input
+        type="file"
+        name="image_name"
+        id="image_name"
+        class="form-control"
+        required
+      />
+      <input type="submit" value="Upload" class="btn btn-outline-secondary" />
+    </div>
+  </form>
+</div>
+
+{% if upload %}
+
+<div class="container">
+  <br /><br />
+  <table>
+    <tr>
+      <td>
+        <img
+          class="rounded float-left img-fluid"
+          src="/static/upload/{{uploaded_image}}"
+          alt="image"
+        />
+      </td>
+      <td>
+        <img
+          class="rounded float-right img-fluid"
+          src="/static/predict/{{uploaded_image}}"
+          alt="image"
+        />
+      </td>
+    </tr>
+  </table>
+  <br />
+  <!-- todo: edit it from herr -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <div class="card text-white bg-dark mb-3 h-100">
+          <div class="card-body">
+            <h4 class="card-title">Highest Confidence Score Cropped Face</h4>
+            <br />
+            <img
+              class="img-fluid card-text border-dark"
+              src="/static/predict/crop_face/{{croped_image}}"
+              alt="image"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card text-white bg-dark mb-3 h-100">
+          <div class="card-body">
+            <h4 class="card-title">Face Attributes</h4>
+            <br />
+            <br />
+            <p class="card-text" style="font-size: 40px">{{text}}</p>
+            <br /><br />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %} {% endblock body %}
+</div>

@@ -1,0 +1,18 @@
+FROM python:3.10
+
+# Create a folder /app if it doesn't exist,
+# the /app folder is the current working directory
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+RUN pip install torch==2.1.0 torchvision==0.16.0  --index-url https://download.pytorch.org/whl/cpu
+WORKDIR /app
+
+# Copy all the files in the current directory to the /app folder
+COPY . /app
+
+EXPOSE 8080
+
+# Disable pip cache to shrink the image size a little bit,
+# since it does not need to be re-installed
+RUN pip install -r requirements.txt  --no-cache-dir
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -1,9 +1,17 @@
 import torch
 import torchvision
 from torchvision import transforms
-import json 
+import json
+from torchvision.models._api import WeightsEnum
+from torch.hub import load_state_dict_from_url 
 from torchvision.models import resnet18, resnet34, resnet50, resnet101,efficientnet_b0,efficientnet_b1
-from model import HydraNetModified
+# def get_state_dict(self, *args, **kwargs):
+#     kwargs.pop("check_hash")
+#     return load_state_dict_from_url(self.url, *args, **kwargs)
+# WeightsEnum.get_state_dict = get_state_dict
+
+import src.config as cfg
+from src.model import HydraNetModified
 def convert(x1,y1,x2,y2):
     "return x,y,w,h"
     x=x1
@@ -32,16 +40,21 @@ def mapping(json_path):
     masked_mapping={v: k for k, v in masked_mapping.items()}
     return age_mapping,gender_mapping,race_mapping,emotion_mapping,skintone_mapping,masked_mapping
 def get_model_analysis(name="efficientnet",weight_path="weights_2/model_15.pth"):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device=torch.device(cfg.device)
     if name=="efficientnet":
-        weights = torchvision.models.EfficientNet_B0_Weights.DEFAULT
-        net=torchvision.models.efficientnet_b0(weights=weights)
+        #weights = torchvision.models.EfficientNet_B0_Weights.DEFAULT
+        net=torchvision.models.efficientnet_b0(pretrained=True)
         model = HydraNetModified(net,backbone="efficientnet")
     elif name=="resnet":
         net = resnet34(pretrained=True)
         model = HydraNetModified(net,backbone="resnet")
     if weight_path is not None:
-        model.load_state_dict(torch.load(weight_path))
+        if cfg.device=="cpu":
+            model.load_state_dict(torch.load(weight_path,map_location=torch.device('cpu')))
+        else:
+            model.load_state_dict(torch.load(weight_path))
+        #model.load_state_dict(torch.load(weight_path))
     model.to(device=device)
     model.eval()
     return model

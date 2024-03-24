@@ -1,0 +1,19 @@
+FROM nvidia/cuda:11.7.1-devel-ubuntu20.04
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+RUN apt-get update -y && apt upgrade -y
+
+RUN apt-get install -y software-properties-common python3-pip python3-dev build-essential hdf5-tools libgl1 libgtk2.0-dev
+RUN apt-get -y install libgeos-dev
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
+RUN  pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 --extra-index-url https://download.pytorch.org/whl/cu117
+WORKDIR /app
+COPY . /app
+
+EXPOSE 8080
+
+# Disable pip cache to shrink the image size a little bit,
+# since it does not need to be re-installed
+RUN pip install -r requirements.txt
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]

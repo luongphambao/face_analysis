@@ -20,7 +20,9 @@ class Yolov5Face(object):
 
         :param model_path: Path to the YOLOv5 model file (default is yolov5n-0.5.pt)
         """
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #device=torch.device("cpu")
+        device=torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print("Using {} for face detection".format(device))
         self.device = device
         self.model = attempt_load(model_file, map_location=device)

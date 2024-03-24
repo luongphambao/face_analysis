@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', path='favicon.ico') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <title>Face Analysis</title>
+  </head>
+  <body>
+    <!--* ------------------------------ nav-start ------------------------------ -->
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <h1 class="display-6">Face Analysis</h1>
+        </a>
+      </div>
+    </nav>
+    <!--* ------------------------------- nav-end ------------------------------- -->
+
+    <!--? ----------------------------- main-start ------------------------------ -->
+    {% block body %}{% endblock body %}
+    <!--? ------------------------------ main-end ------------------------------- -->
+
+    <!--! ---------------------------- footer-start ----------------------------- -->
+    <!-- <footer>
+      <hr />
+      <div
+        class="text-center p-4"
+        style="background-color: rgba(0, 0, 0, 0.05)"
+      >
+        © 2023 Copyright:
+        <a class="text-reset fw-bold" href="https://murtadanazar.netlify.app/"
+          >Murtaza Nazar</a
+        >
+      </div>
+    </footer> -->
+    <!--! ----------------------------- footer-end ------------------------------ -->
+
+    <!-- ----------------------------------------------------------------------- -->
+    <!--                             bootstrap linke                             -->
+    <!-- ----------------------------------------------------------------------- -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+      integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
